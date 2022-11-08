@@ -19,13 +19,13 @@
 
 <body>
     <!-- <div id="app"> -->
-        <!-- <p>Hello D3 Demo</p>
+    <!-- <p>Hello D3 Demo</p>
         <p>No.1</p>
         <p>No.2</p>
         <p>No.3</p>
         <p>No.4</p>
         <p>No.5</p> -->
-        <!-- <canvas id="cnavas1"></canvas>
+    <!-- <canvas id="cnavas1"></canvas>
         <canvas id="cnavas2"></canvas>
         <canvas id="cnavas3"></canvas> -->
     <!-- </div> -->
@@ -50,7 +50,7 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://d3js.org/topojson.v1.min.js"></script>
 <script>
-
+    
     var diameter = 960 / 3,
         radius = diameter / 2,
         velocity = 0.01;
@@ -60,13 +60,6 @@
         .translate([radius, radius])
         .clipAngle(90)
         .precision(0);
-
-    // d3.select("body").selectAll(".title")
-    //     .data(["λ", "φ", "γ"])
-    //     .enter().append("div")
-    //     .attr("class", "title")
-    //     .style("width", diameter + "px")
-    //     .text(function (d) { return d; });
 
     var canvas = d3.select("body").selectAll("canvas")
         .data(d3.range(3))
@@ -78,7 +71,7 @@
     var path = d3.geoPath()
         .projection(projection);
 
-    d3.json("/data.json", function (error, world) {
+    d3.json("./data.json", function (error, world) {
         if (error) throw error;
 
         var land = topojson.feature(world, world.objects.land),
