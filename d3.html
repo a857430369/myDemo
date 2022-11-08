@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3 Demo</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<style>
+    .title {
+        display: inline-block;
+        font-size: 48px;
+        line-height: 90px;
+        text-align: center;
+    }
+</style>
+
+<body>
+    <!-- <div id="app"> -->
+        <!-- <p>Hello D3 Demo</p>
+        <p>No.1</p>
+        <p>No.2</p>
+        <p>No.3</p>
+        <p>No.4</p>
+        <p>No.5</p> -->
+        <!-- <canvas id="cnavas1"></canvas>
+        <canvas id="cnavas2"></canvas>
+        <canvas id="cnavas3"></canvas> -->
+    <!-- </div> -->
+
+    <!-- <script>
+        d3.select("body")
+            .selectAll("p")
+            .style("color", "#fff")
+            .data([4, 8, 15, 16, 23, 42])
+            .append("p").text((d) => `No.${d}`)
+            .style("color", "#fff")
+            .style("font-size", (d) => d + 'px');
+
+        d3.select("body")
+            .transition()
+            .duration(750)
+            .delay((d, i) => i * 5000)
+            .attr("r", function (d) { return Math.sqrt(d * 4); })
+            .style("background-color", "black");
+    </script> -->
+</body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/topojson.v1.min.js"></script>
+<script>
+
+    var diameter = 960 / 3,
+        radius = diameter / 2,
+        velocity = 0.01;
+
+    var projection = d3.geoOrthographic()
+        .scale(radius - 2)
+        .translate([radius, radius])
+        .clipAngle(90)
+        .precision(0);
+
+    // d3.select("body").selectAll(".title")
+    //     .data(["λ", "φ", "γ"])
+    //     .enter().append("div")
+    //     .attr("class", "title")
+    //     .style("width", diameter + "px")
+    //     .text(function (d) { return d; });
+
+    var canvas = d3.select("body").selectAll("canvas")
+        .data(d3.range(3))
+        .enter().append("canvas")
+        .datum(function () { return this.getContext("2d"); })
+        .attr("width", diameter)
+        .attr("height", diameter);
+
+    var path = d3.geoPath()
+        .projection(projection);
+
+    d3.json("/data.json", function (error, world) {
+        if (error) throw error;
+
+        var land = topojson.feature(world, world.objects.land),
+            globe = { type: "Sphere" };
+
+        d3.timer(function (elapsed) {
+            var angle = velocity * elapsed;
+            canvas.each(function (context, i) {
+                var rotate = [0, 0, 0];
+                rotate[i] = angle, projection.rotate(rotate);
+                context.clearRect(0, 0, diameter, diameter);
+                context.beginPath(), path.context(context)(land), context.fill();
+                context.beginPath(), path(globe), context.stroke();
+            });
+        });
+    });
+
+</script>
+
+</html>
