@@ -1,0 +1,1 @@
+import{al as e,o as c,c as t}from"./index.91db81b7.js";const o=""+new URL("data.379c8c1b.png",import.meta.url).href,r={},n={src:o};function s(a,_){return c(),t("img",n)}const f=e(r,[["render",s]]);export{f as default};
